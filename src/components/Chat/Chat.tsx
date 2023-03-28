@@ -14,9 +14,11 @@ function ChatView({
   onLoadMore: () => void;
 }) {
   return (
-    <div className="m-6 flex flex-col items-center justify-between gap-6">
-      <MessageBoard messages={messages} onLoadMore={onLoadMore} />
-      <MessageForm onSubmit={undefined} />
+    <div className="grow mx-auto max-w-7xl mt-4 mb-6 sm:px-6 lg:px-8">
+      <div className="h-full flex flex-col justify-between mx-auto max-w-3xl">
+        <MessageBoard messages={messages} onLoadMore={onLoadMore} />
+        <MessageForm onSubmit={undefined} />
+      </div>
     </div>
   );
 }

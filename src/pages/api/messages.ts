@@ -11,7 +11,7 @@ export default function handler(
   _: NextApiRequest,
   res: NextApiResponse<CustomResponse>
 ) {
-  const messages = generateFakeMessages(5);
+  const messages = generateFakeMessages(50);
 
   res.status(200).json({ messages });
 }

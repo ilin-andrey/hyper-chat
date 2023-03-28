@@ -1,10 +1,14 @@
+import { FormEventHandler } from "react";
+
 export function MessageForm({ onSubmit }: { onSubmit?: () => void }) {
-  const handleSubmit = () => {
+  const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
+    e.preventDefault();
+
     if (onSubmit) onSubmit();
   };
 
   return (
-    <div className="flex items-start space-x-4 min-w-200 w-2/4">
+    <div className="flex items-start space-x-4 mx-4">
       <div className="min-w-0 flex-1">
         <form action="#" className="relative" onSubmit={handleSubmit}>
           <div className="overflow-hidden rounded-lg shadow-sm ring-1 ring-inset ring-gray-300">

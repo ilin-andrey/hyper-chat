@@ -7,9 +7,10 @@ export function generateFakeMessages(amount: number = 1) {
 
   for (let i = 0; i < amount; i++) {
     result.push({
+      id: faker.datatype.uuid(),
       author: faker.name.fullName(),
       content: faker.lorem.lines(),
-      createdAt: faker.date.past(),
+      createdAt: faker.date.past().toISOString(),
     });
   }
 

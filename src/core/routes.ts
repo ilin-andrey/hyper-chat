@@ -1,3 +1,5 @@
 export const ROUTES = {
-  MESSAGES: "/api/messages",
+  API: {
+    MESSAGES: "/api/messages",
+  },
 };

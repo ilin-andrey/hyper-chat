@@ -1,5 +1,5 @@
-export function formatDate(dateString: string): string {
-  const date = new Date(dateString);
+export function formatDate(isoDateString: string): string {
+  const date = new Date(isoDateString);
 
   return date.toLocaleString();
 }

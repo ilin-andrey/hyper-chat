@@ -1,10 +1,29 @@
-import { FormEventHandler } from "react";
+import { ChangeEventHandler, FormEventHandler, useState } from "react";
 
-export function MessageForm({ onSubmit }: { onSubmit?: () => void }) {
+export function MessageForm({
+  disabled,
+  onSubmit,
+}: {
+  disabled?: boolean;
+  onSubmit?: (s: string) => void;
+}) {
+  const [state, setState] = useState("");
+
+  const handleChange: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
+    setState(e.target.value);
+  };
+
   const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
 
-    if (onSubmit) onSubmit();
+    // TODO: process possible errors
+    if (onSubmit) {
+      // send message to the chat
+      onSubmit(state);
+
+      // clear value in textarea if everything is ok
+      setState("");
+    }
   };
 
   return (
@@ -16,12 +35,13 @@ export function MessageForm({ onSubmit }: { onSubmit?: () => void }) {
               Your message...
             </label>
             <textarea
+              id="message"
               rows={3}
               name="message"
-              id="message"
               className="block w-full resize-none border-0 bg-transparent py-3 px-4 text-gray-900 outline-0 placeholder:text-gray-400 sm:text-sm sm:leading-6"
               placeholder="Add your message..."
-              defaultValue={""}
+              value={state}
+              onChange={handleChange}
             />
 
             {/* Spacer element to match the height of the toolbar */}
@@ -38,6 +58,7 @@ export function MessageForm({ onSubmit }: { onSubmit?: () => void }) {
               <button
                 type="submit"
                 className="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500"
+                disabled={disabled}
               >
                 Send
               </button>

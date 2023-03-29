@@ -22,11 +22,17 @@ function ChatView({
   return (
     <div className="grow flex flex-col items-center w-full mt-4 mb-6 md:px-6">
       <div className="h-full flex flex-col justify-between mx-auto w-full max-w-3xl">
-        <MessageBoard
-          loading={isLoading}
-          messages={messages}
-          onLoadMore={onLoadMore}
-        />
+        <div className="relative grow flex flex-col gap-6">
+          <div className="flex justify-between items-center mx-4">
+            <h2 className="font-bold">Messages</h2>
+          </div>
+
+          {isLoading ? (
+            <div className="p-4 w-full">Loading...</div>
+          ) : (
+            <MessageBoard messages={messages} onLoadMore={onLoadMore} />
+          )}
+        </div>
         <MessageForm disabled={isLoading} onSubmit={onNewMessage} />
       </div>
     </div>

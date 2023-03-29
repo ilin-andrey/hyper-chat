@@ -57,8 +57,8 @@ export function MessageForm({
             <div className="flex-shrink-0">
               <button
                 type="submit"
-                className="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500"
-                disabled={disabled}
+                className="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 disabled:opacity-75 disabled:pointer-events-none"
+                disabled={disabled || state.length === 0}
               >
                 Send
               </button>

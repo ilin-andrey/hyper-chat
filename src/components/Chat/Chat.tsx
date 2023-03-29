@@ -62,6 +62,8 @@ export function Chat() {
 
   const handleNewMessage = useCallback(
     async (msg: string) => {
+      if (msg.length === 0) return;
+
       // TODO: add real data if needed
       const newMsg = {
         ...getRandomMessage(),

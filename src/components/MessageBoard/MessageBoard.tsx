@@ -35,10 +35,20 @@ export function MessageBoard({
   // let's imagine we know that list grows from beginning this case
   const handleLoadMore = useCallback(async () => {
     // const length = await onLoadMore();
-    // setVisibleRange((prev) => {
-    //   return [prev[0] + length, prev[1] + length];
-    // });
+    // setVisibleRange((prev) => [prev[0] + length, prev[1] + length]);
   }, [onLoadMore]);
+
+  const handleNewMessage = useCallback(() => {
+    if (!outerRef.current) return;
+
+    const left =
+      items.length -
+      Math.max(
+        0,
+        Math.ceil(outerRef.current.clientHeight / DEFAULT_ITEM_HEIGHT)
+      );
+    setVisibleRange([left, items.length - 1]);
+  }, [items.length]);
 
   const getItemOffset = (index: number) => {
     return itemsOffsets.current[index] || 0;
@@ -201,18 +211,12 @@ export function MessageBoard({
       // FIXME: this is hack to detect new message
       const isNewMessage = items.length - prevItemsCount.current === 1;
       if (isNewMessage) {
-        const left =
-          items.length -
-          Math.max(
-            0,
-            Math.ceil(outerRef.current.clientHeight / DEFAULT_ITEM_HEIGHT)
-          );
-        setVisibleRange([left, items.length - 1]);
+        handleNewMessage();
       }
 
       prevItemsCount.current = items.length;
     }
-  }, [items.length]);
+  }, [handleNewMessage, items.length]);
 
   // recalculate visible range
   useEffect(() => {

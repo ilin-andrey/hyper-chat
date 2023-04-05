@@ -16,7 +16,7 @@ function ChatView({
 }: {
   messages: Array<Message>;
   isLoading?: boolean;
-  onLoadMore: () => void;
+  onLoadMore: () => Promise<number>;
   onNewMessage: (s: string) => void;
 }) {
   return (
@@ -30,7 +30,7 @@ function ChatView({
           {isLoading ? (
             <div className="p-4 w-full">Loading...</div>
           ) : (
-            <MessageBoard messages={messages} onLoadMore={onLoadMore} />
+            <MessageBoard items={messages} onLoadMore={onLoadMore} />
           )}
         </div>
         <MessageForm disabled={isLoading} onSubmit={onNewMessage} />
@@ -58,6 +58,8 @@ export function Chat() {
       { ...data, messages: [...newMessages, ...(data?.messages || [])] },
       false
     );
+
+    return newMessages.length;
   }, [data, mutate]);
 
   const handleNewMessage = useCallback(

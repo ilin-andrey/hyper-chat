@@ -9,6 +9,7 @@ import { Message } from "~/core/messages";
 
 import { MessageRow } from "./MessageRow";
 import { Mesurable } from "./Mesurable";
+import { SafelyRenderChildren } from "./SafelyRenderChildren";
 
 const DEFAULT_ITEM_HEIGHT = 130;
 const DEFAULT_SCROLL_TIMEOUT = 50;
@@ -369,26 +370,28 @@ export function MessageBoard({
           minHeight: `${innerHeightRef.current}px`,
         }}
       >
-        {items.slice(firstIndex, lastIndex + 1).map((item, index) => (
-          <Mesurable
-            // wrapper to measure size of each message and put it to the right place on the canvas
-            key={item.id}
-            // hack to identify size and position of element, values are in place when useEffect runs after re-render
-            ref={(ref) => handleItemRender(firstIndex + index, ref)}
-            offset={getCachedItemOffset(firstIndex + index)}
-            style={
-              // don't show to user elements with wrong position
-              firstIndex + index > 0 &&
-              getCachedItemOffset(firstIndex + index) === 0
-                ? {
-                    visibility: "hidden",
-                  }
-                : {}
-            }
-          >
-            <MessageRow message={item} />
-          </Mesurable>
-        ))}
+        <SafelyRenderChildren>
+          {items.slice(firstIndex, lastIndex + 1).map((item, index) => (
+            <Mesurable
+              // wrapper to measure size of each message and put it to the right place on the canvas
+              key={item.id}
+              // hack to identify size and position of element, values are in place when useEffect runs after re-render
+              ref={(ref) => handleItemRender(firstIndex + index, ref)}
+              offset={getCachedItemOffset(firstIndex + index)}
+              style={
+                // don't show to user elements with wrong position
+                firstIndex + index > 0 &&
+                getCachedItemOffset(firstIndex + index) === 0
+                  ? {
+                      visibility: "hidden",
+                    }
+                  : {}
+              }
+            >
+              <MessageRow message={item} />
+            </Mesurable>
+          ))}
+        </SafelyRenderChildren>
       </div>
     </div>
   );

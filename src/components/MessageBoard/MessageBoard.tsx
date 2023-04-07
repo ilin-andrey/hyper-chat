@@ -1,10 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import {
-  cancelTimeout,
-  requestTimeout,
-  useIntersectionObserver,
-} from "~/core/hooks";
+import { useIntersectionObserver, useScrollPosition } from "~/core/hooks";
 import { Message } from "~/core/messages";
 
 import { MessageRow } from "./MessageRow";
@@ -33,7 +29,6 @@ export function MessageBoard({
   const [forcedCalculation, forceHeightCalculation] = useState<number>(0);
   const [scrollToBottom, forceScrollToBottom] = useState<number>(0);
 
-  const rafTimeoutRef = useRef<number>(0);
   const lastCorrectOffsetIndex = useRef<number>(-1);
   const prevItemsCount = useRef<number>(0);
   const innerHeightRef = useRef<number>(0);
@@ -245,15 +240,7 @@ export function MessageBoard({
     setVisibleRange([firstVisibleIndex, lastVisibleIndex]);
   }, [firstIndex, lastIndex, items.length]);
 
-  const throttledHandleScroll = useCallback(() => {
-    if (!rafTimeoutRef.current) {
-      const handler = () => {
-        updateVisibleRange();
-        rafTimeoutRef.current = 0;
-      };
-      rafTimeoutRef.current = requestTimeout(handler, DEFAULT_SCROLL_TIMEOUT);
-    }
-  }, [updateVisibleRange]);
+  useScrollPosition(outerRef, updateVisibleRange, DEFAULT_SCROLL_TIMEOUT);
 
   // update inner container height on items.length change
   useEffect(() => {
@@ -297,22 +284,6 @@ export function MessageBoard({
       scrollToAlignRef.current = 0;
     }
   }, [firstIndex, lastIndex]);
-
-  // assign handlers for onScroll events
-  useEffect(() => {
-    const node = outerRef?.current;
-    if (node) {
-      node.addEventListener("scroll", throttledHandleScroll);
-    }
-
-    return () => {
-      if (node) {
-        node.removeEventListener("scroll", throttledHandleScroll);
-        cancelTimeout(rafTimeoutRef.current);
-        rafTimeoutRef.current = 0;
-      }
-    };
-  }, [throttledHandleScroll]);
 
   // scroll to the bottom when state of the flag was changed, skip first render
   useEffect(() => {

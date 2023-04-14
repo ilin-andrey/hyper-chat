@@ -5,7 +5,7 @@ export default function Index() {
   return (
     <>
       <Header>
-        <span>Hyper Chat</span>
+        <span>JetBrains [Datalore] - Tech Interview</span>
       </Header>
       <Chat />
     </>
